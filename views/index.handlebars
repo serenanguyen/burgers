@@ -1,17 +1,29 @@
 <h1>Burgers All Day</h1>
 
+<h2>Burgers</h2>
 {{#each burgers}}
-  <p>
-    {{this.burger_name}}
-    <form action="/{{this.id}}?_method=PUT" method="POST" class="button-size">
-        <input type="hidden" name="id" value="{{this.id}}">
-        <button type="submit">Devour</button>
-    </form>
-  </p>
+  {{#unless this.devoured}}
+    <p>
+      {{this.burger_name}}
+      <form action="/{{this.id}}?_method=PUT" method="POST" class="button-size">
+          <input type="hidden" name="devour" value="true">
+          <button type="submit">Devour</button>
+      </form>
+    </p>
+  {{/unless}}
+{{/each}}
+
+<h2>Eaten Burgers.</h2>
+{{#each burgers}}
+  {{#if this.devoured}}
+    <p>
+      {{this.burger_name}}
+    </p>
+  {{/if}}
 {{/each}}
 
 <h2>Add a Burger</h2>
 <form method="POST" action="/" class="button-size">
-	<textarea type="text" name="burger_name"></textarea>
+	<input type="text" name="burger_name">
 	<button type="submit">Add Burger!</button>
 </form>

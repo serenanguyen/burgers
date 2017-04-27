@@ -1,9 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var methodOverride = require("method-override");
-
-var orm = require("./config/orm.js");
-
+// create instance of express
 var app = express();
 var port = 3000;
 
@@ -14,42 +12,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Override with POST having ?_method=DELETE
 app.use(methodOverride("_method"));
 
+// use handlebars
 var exphbs = require("express-handlebars");
+
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-// var mysql = require("mysql");
-//
-// var connection = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "",
-//   database: "burgersDB"
-// });
-//
-// connection.connect(function(err) {
-//   if (err) {
-//     console.error("error connecting: " + err.stack);
-//     return;
-//   }
-//   console.log("connected as id " + connection.threadId);
-// });
+var routes = require("./controllers/burgers_controller.js");
 
-//routes
-app.get("/", function(req, res){
-orm.selectAll("burger_name", "burgers");
-  res.render("index", {burgers: result})
-});
-
-app.post("/", function(req, res){
-  orm.insertOne("burgers", "burger_name", req.body.burger_name);
-  res.redirect("/");
-});
-
-app.put("/:id", function(req,res){
-  orm.updateOne("burgers", "burger_name", req.body.burger_name, req.params.id);
-  res.redirect("/");
-});
+app.use("/", routes);
 
 app.listen(port, function() {
   console.log("Listening on PORT " + port);
