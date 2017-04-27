@@ -1,15 +1,5 @@
 var connection = require("./connection.js");
 
-function printQuestionMarks(num) {
-  var arr = [];
-
-  for (var i = 0; i < num; i++) {
-    arr.push("?");
-  }
-
-  return arr.toString();
-}
-
 function objToSql(ob){
   var arr=[];
   for(var key in ob){
@@ -22,8 +12,8 @@ function objToSql(ob){
 
 // object for all sql statement functions
 var orm = {
-  selectAll: function(table, cb){
-    var queryString = "SELECT * FROM "+table;
+  selectAll: function(cb){
+    var queryString = "SELECT * FROM burgers";
     connection.query(queryString, function(err, result){
       if(err){
         throw err;
@@ -31,10 +21,10 @@ var orm = {
       cb(result);
     });
   },
-  insertOne: function(table, colName, val, cb){
+  insertOne: function(val, cb){
     // insert into burgers (burgers) values (val)
-    var queryString = "INSERT INTO "+table+" ("+colName.toString()+") VALUES ("+printQuestionMarks(val.length)+") ";
-    connection.query(queryString, val, function(err, result){
+    var queryString = "INSERT INTO burgers (burger_name) VALUES ('" + val.toString() + "')";
+    connection.query(queryString, function(err, result){
       if(err){
         throw err;
       }
